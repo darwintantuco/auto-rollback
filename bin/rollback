@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+is_git_repo() {
+ $(git rev-parse --is-inside-work-tree 2> /dev/null)
+}
+
+git_hooks_path=$(git rev-parse --show-toplevel)/.git/hooks
+
+info() {
+  echo "usage: rollback <flags>"
+  echo ""
+  echo "flags:"
+  echo "  --enable      enable auto migrate on git checkout"
+  echo "  --disable     disable auto migrate on git checkout"
+}
+
+generate_pre_push_hook() {
+  cat << EOT > $git_hooks_path/post-checkout
+#!/usr/bin/env sh
+
+ROLLBACK=\$(git config --get rollback.status)
+if [ \$ROLLBACK != "enabled" ]; then exit 0; fi
+if [ \$3 == 0 ]; then exit 0; fi
+if [ -d "db/migrate" ]; then
+  # Compare HEAD and other branch, get unique migration versions
+  versions="\$(git diff --name-only \$(git rev-parse --abbrev-ref \$1...\$2) db/migrate | grep -oE '\d{14}' )"
+  # Reverse the order, revert starting from latest migration
+  versions="\$(echo \$versions | awk '{ for (i=NF; i>1; i--) printf("%s ",\$i); print \$1; }')"
+  for version in \$versions; do
+    echo "Running bundle exec rake db:migrate:down VERSION=$version"
+    bundle exec rake db:migrate:down VERSION=$version &> /dev/null
+  done
+  git checkout db/schema.rb
+fi
+}
+EOT
+  chmod +x $git_hooks_path/post-checkout
+}
+
+handle_enable() {
+  git config --replace-all rollback.status enabled
+}
+
+handle_disable() {
+  git config --replace-all rollback.status disabled
+}
+
+check_args() {
+  if [ "${ARGS[*]}" = ""]; then
+    info
+    exit 0
+  elif [ "${ARGS[*]}" = "--enabled" ]; then
+    handle_enable
+    exit 0
+  elif [ "${ARGS[*]}" = "--disabled" ]; then
+    handle_disable
+    exit 0
+  else
+    echo "rollback ${ARGS[*]} is invalid"
+    echo ""
+    info
+    exit 1
+  fi
+}
+
+if is_git_repo; then
+  check_args
+else
+  echo "rollback should be executed on a git repository"
+  echo ""
+  info
+  exit 1
+fi
