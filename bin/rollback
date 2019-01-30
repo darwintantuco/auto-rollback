@@ -21,7 +21,7 @@ info() {
 
 generate_post_checkout() {
   cat << EOT > $git_hooks_path/post-checkout
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 ROLLBACK=\$(git config --get rollback.status)
 if [ \$ROLLBACK != "enabled" ]; then exit 0; fi
@@ -37,7 +37,6 @@ if [ -d "db/migrate" ]; then
   done
   git checkout db/schema.rb
 fi
-}
 EOT
   chmod +x $git_hooks_path/post-checkout
 }

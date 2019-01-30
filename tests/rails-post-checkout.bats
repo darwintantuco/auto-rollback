@@ -8,9 +8,21 @@ BASE_DIR=$(dirname $BATS_TEST_DIRNAME)
 
 setup() {
   cd $WORKSPACE
-  run rails new appname
-  run rails db:create
-  run rails db:migrate
+  rails new appname
+  cd appname
+  rm .ruby-version
+  bin/rails db:create
+  bin/rails db:migrate
+  git init
+  git add .
+  git commit -m "Initial commit"
+
+  run $BASE_DIR/bin/rollback enable
+  assert_success
+
+  assert [ -e $WORKSPACE/appname/.git/hooks/post-checkout ]
+
+  cat $WORKSPACE/appname/.git/hooks/post-checkout
 }
 
 teardown() {
@@ -21,5 +33,17 @@ teardown() {
 }
 
 @test 'git checkout with new migrations' {
-  # normal checkout
+  git checkout -b awesome-branch
+
+  assert_success
+
+  bin/rails generate migration CreateProducts name:string part_number:string
+  bin/rails db:migrate
+
+  git add .
+  git commit -m "Orphan migration"
+
+  git checkout master
+
+  assert_success
 }
