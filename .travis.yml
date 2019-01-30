@@ -1,5 +1,5 @@
-language: node_js
-node_js:
-  - "6"
-script:
-  - yarn && yarn test
+language: ruby
+rvm:
+  - ruby 2.6.0
+install: gem install rails
+script: yarn && yarn test
