@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/dcrtantuco/rollback.svg?branch=master)](https://travis-ci.org/dcrtantuco/rollback)
 
-Custom `post-checkout` git hook to auto revert any migration when performing git checkout
+Custom `post-checkout` git hook to auto revert new migrations when performing git checkout
 
 Backup existing `post-checkout` hook
 
@@ -36,7 +36,7 @@ rollback --disable
 
 ## How auto revert on rails work?
 
-1. It compares the HEAD and previous branch, then get all unique migrations versions
+1. It compares the HEAD and previous branch, then get all new migrations versions
 1. Execute `bundle exec rake db:migrate:down VERSION=<version>` on each version
 1. Undo any changes on `db/schema.rb`
 1. Proceed with `git checkout`
