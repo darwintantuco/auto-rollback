@@ -78,12 +78,8 @@ add_post_checkout() {
 }
 
 display_rollback_status() {
- status=echo $(git config --get rollback.status)
- if [ -z "$status" ]; then
-   echo $status
- else
-   echo disabled
- fi
+ status=$(git config --get rollback.status)
+ echo ${status:-disabled}
 }
 
 check_args() {

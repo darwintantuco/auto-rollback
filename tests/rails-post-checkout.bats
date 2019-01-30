@@ -21,8 +21,6 @@ setup() {
   assert_success
 
   assert [ -e $WORKSPACE/appname/.git/hooks/post-checkout ]
-
-  cat $WORKSPACE/appname/.git/hooks/post-checkout
 }
 
 teardown() {
@@ -35,15 +33,21 @@ teardown() {
 @test 'git checkout with new migrations' {
   git checkout -b awesome-branch
 
-  assert_success
-
   bin/rails generate migration CreateProducts name:string part_number:string
+
   bin/rails db:migrate
+
+  bin/spring stop
 
   git add .
   git commit -m "Orphan migration"
 
-  git checkout master
+  run git checkout master
 
   assert_success
+
+  run git checkout awesome-branch
+
+  assert_success
+  assert_line --partial "Running bundle exec"
 }
