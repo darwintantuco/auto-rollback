@@ -20,7 +20,9 @@ npm install -g rollback
 
 Execute `rollback` on a git repository
 
-Supported apps: rails
+Supported apps:
+
+- rails
 
 ### Show current rollback status
 
@@ -47,10 +49,10 @@ rollback disable
 1. Undo any changes on `db/schema.rb`
 1. Proceed with `git checkout`
 
-### Notes
+### Note
 
 - Assumes all migration are reversible
-- `bundle exec` fails silently
+- `bundle exec rake db:migrate:down` fails silently
 
 ## License
 
