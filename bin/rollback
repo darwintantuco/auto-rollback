@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 ARGS=($@)
+
 is_git_repo() {
   $(git rev-parse --is-inside-work-tree 2> /dev/null)
 }
@@ -8,14 +9,14 @@ is_git_repo() {
 git_hooks_path=$(git rev-parse --show-toplevel)/.git/hooks
 
 info() {
-  echo "usage: rollback <flags>"
+  echo "usage: rollback <commands>"
   echo ""
-  echo "flags:"
-  echo "  --enable      enable auto migrate on git checkout"
-  echo "  --disable     disable auto migrate on git checkout"
+  echo "commands:"
+  echo "  status      show current rollback status"
+  echo "  enable      enable auto migrate"
+  echo "  disable     disable auto migrate"
   echo ""
-  echo "supported apps:"
-  echo "  rails"
+  echo "supported apps: rails"
 }
 
 generate_post_checkout() {
@@ -38,7 +39,6 @@ if [ -d "db/migrate" ]; then
 fi
 }
 EOT
-  echo watttt
   chmod +x $git_hooks_path/post-checkout
 }
 
@@ -78,16 +78,29 @@ add_post_checkout() {
   fi
 }
 
+display_rollback_status() {
+ status=echo $(git config --get rollback.status)
+ if [ -z "$status" ]; then
+   echo $status
+ else
+   echo disabled
+ fi
+}
+
 check_args() {
   if [ "${ARGS[*]}" = "" ]; then
     info
     exit 0
-  elif [ "${ARGS[*]}" = "--enable" ]; then
+  elif [ "${ARGS[*]}" = "status" ]; then
+    handle_invalid_apps
+    display_rollback_status
+    exit 0
+  elif [ "${ARGS[*]}" = "enable" ]; then
     handle_invalid_apps
     handle_enable_flag
     add_post_checkout
     exit 0
-  elif [ "${ARGS[*]}" = "--disable" ]; then
+  elif [ "${ARGS[*]}" = "disable" ]; then
     handle_invalid_apps
     handle_disable_flag
     add_post_checkout
