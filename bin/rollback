@@ -1,5 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
+ARGS=($@)
 is_git_repo() {
  $(git rev-parse --is-inside-work-tree 2> /dev/null)
 }
@@ -12,9 +13,12 @@ info() {
   echo "flags:"
   echo "  --enable      enable auto migrate on git checkout"
   echo "  --disable     disable auto migrate on git checkout"
+  echo ""
+  echo "supported apps:"
+  echo "  rails"
 }
 
-generate_pre_push_hook() {
+generate_post_checkout() {
   cat << EOT > $git_hooks_path/post-checkout
 #!/usr/bin/env sh
 
@@ -27,36 +31,69 @@ if [ -d "db/migrate" ]; then
   # Reverse the order, revert starting from latest migration
   versions="\$(echo \$versions | awk '{ for (i=NF; i>1; i--) printf("%s ",\$i); print \$1; }')"
   for version in \$versions; do
-    echo "Running bundle exec rake db:migrate:down VERSION=$version"
-    bundle exec rake db:migrate:down VERSION=$version &> /dev/null
+    echo "Running bundle exec rake db:migrate:down VERSION=\$version"
+    bundle exec rake db:migrate:down VERSION=\$version &> /dev/null
   done
   git checkout db/schema.rb
 fi
 }
 EOT
+  echo watttt
   chmod +x $git_hooks_path/post-checkout
 }
 
-handle_enable() {
+handle_enable_flag() {
   git config --replace-all rollback.status enabled
 }
 
-handle_disable() {
+handle_disable_flag() {
   git config --replace-all rollback.status disabled
 }
 
+is_rails_app() {
+  grep 'rails' 'Gemfile' -s &> /dev/null
+}
+
+handle_invalid_apps() {
+  if ! is_rails_app; then
+    echo "app not supported"
+    echo ""
+    info
+    exit 1
+  fi
+}
+
+rollback_post_checkout_exist() {
+  cat $git_hooks_path/post-checkout | grep ROLLBACK > /dev/null 2>&1
+}
+
+add_post_checkout() {
+  if [ ! -f $git_hooks_path/post-checkout ]; then
+    generate_post_checkout
+  else
+    if ! rollback_post_checkout_exist; then
+      mv $git_hooks_path/post-checkout $git_hooks_path/post-checkout.old
+      generate_post_checkout
+    fi
+  fi
+}
+
 check_args() {
-  if [ "${ARGS[*]}" = ""]; then
+  if [ "${ARGS[*]}" = "" ]; then
     info
     exit 0
-  elif [ "${ARGS[*]}" = "--enabled" ]; then
-    handle_enable
+  elif [ "${ARGS[*]}" = "--enable" ]; then
+    handle_invalid_apps
+    handle_enable_flag
+    add_post_checkout
     exit 0
-  elif [ "${ARGS[*]}" = "--disabled" ]; then
-    handle_disable
+  elif [ "${ARGS[*]}" = "--disable" ]; then
+    handle_invalid_apps
+    handle_disable_flag
+    add_post_checkout
     exit 0
   else
-    echo "rollback ${ARGS[*]} is invalid"
+    echo rollback ${ARGS[*]} is invalid
     echo ""
     info
     exit 1
