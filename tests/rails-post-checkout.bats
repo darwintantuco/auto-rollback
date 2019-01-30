@@ -45,9 +45,5 @@ teardown() {
   run git checkout master
 
   assert_success
-
-  run git checkout awesome-branch
-
-  assert_success
   assert_line --partial "Running bundle exec"
 }
