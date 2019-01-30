@@ -22,16 +22,22 @@ Execute `rollback` on a git repository
 
 Supported apps: rails
 
+### Show current rollback status
+
+```
+rollback status
+```
+
 ### Enable auto migrate on git checkout
 
 ```
-rollback --enable
+rollback enable
 ```
 
 ### Disable auto migrate on git checkout
 
 ```
-rollback --disable
+rollback disable
 ```
 
 ## How auto revert on rails work?
