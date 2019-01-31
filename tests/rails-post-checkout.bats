@@ -45,10 +45,8 @@ teardown() {
   run git checkout master
 
   assert_success
-  assert_line --partial "Running bundle exec"
 
   run git checkout awesome-branch
 
   assert_success
-  refute_line --partial "Running bundle exec"
 }
