@@ -34,16 +34,21 @@ teardown() {
   git checkout -b awesome-branch
 
   bin/rails generate migration CreateProducts name:string part_number:string
-
   bin/rails db:migrate
-
-  bin/spring stop
 
   git add .
   git commit -m "Orphan migration"
+
+  bin/spring stop
+  bin/spring binstub --all
 
   run git checkout master
 
   assert_success
   assert_line --partial "Running bundle exec"
+
+  run git checkout awesome-branch
+
+  assert_success
+  refute_line --partial "Running bundle exec"
 }
