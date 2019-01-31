@@ -1,4 +1,4 @@
-# Rollback
+# auto-rollback
 
 [![Build Status](https://travis-ci.org/dcrtantuco/rollback.svg?branch=master)](https://travis-ci.org/dcrtantuco/rollback)
 
@@ -13,12 +13,12 @@ Backup existing `post-checkout` hook
 ### npm
 
 ```
-npm install -g rollback
+npm install -g auto-rollback
 ```
 
 ## Usage
 
-Execute `rollback` on a git repository
+Execute `auto-rollback` on a git repository
 
 Supported apps:
 
@@ -27,19 +27,19 @@ Supported apps:
 ### Show current rollback status
 
 ```
-rollback status
+auto-rollback status
 ```
 
 ### Enable auto migrate on git checkout
 
 ```
-rollback enable
+auto-rollback enable
 ```
 
 ### Disable auto migrate on git checkout
 
 ```
-rollback disable
+auto-rollback disable
 ```
 
 ## How auto revert on rails work?

@@ -28,89 +28,89 @@ initialize_git() {
   git commit -m "Initial commit"
 }
 
-@test 'rollback enable on rails app' {
+@test 'auto-rollback enable on rails app' {
   initialize_git
   dummy_rails_app
 
-  run $BASE_DIR/bin/rollback enable
+  run $BASE_DIR/bin/auto-rollback enable
 
   assert_success
   assert [ -e $AWESOME_REPO/.git/hooks/post-checkout ]
 }
 
-@test 'rollback disable on rails app' {
+@test 'auto-rollback disable on rails app' {
   initialize_git
   dummy_rails_app
 
-  run $BASE_DIR/bin/rollback enable
+  run $BASE_DIR/bin/auto-rollback enable
 
   assert_success
   assert [ -e $AWESOME_REPO/.git/hooks/post-checkout ]
 }
 
-@test 'rollback enable on unsupported app' {
+@test 'auto-rollback enable on unsupported app' {
   initialize_git
 
-  run $BASE_DIR/bin/rollback enable
+  run $BASE_DIR/bin/auto-rollback enable
 
   assert_failure
 }
 
-@test 'rollback invalid args on rails app' {
+@test 'auto-rollback invalid args on rails app' {
   initialize_git
   dummy_rails_app
 
-  run $BASE_DIR/bin/rollback kappa
+  run $BASE_DIR/bin/auto-rollback kappa
 
   assert_failure
-  assert_line --partial "rollback kappa is invalid"
+  assert_line --partial "auto-rollback kappa is invalid"
 }
 
-@test 'rollback invalid args on unsupported app' {
+@test 'auto-rollback invalid args on unsupported app' {
   initialize_git
 
-  run $BASE_DIR/bin/rollback kappa
+  run $BASE_DIR/bin/auto-rollback kappa
 
   assert_failure
-  assert_line --partial "rollback kappa is invalid"
+  assert_line --partial "auto-rollback kappa is invalid"
 }
 
-@test 'rollback on non git repo' {
-  run $BASE_DIR/bin/rollback kappa
+@test 'auto-rollback on non git repo' {
+  run $BASE_DIR/bin/auto-rollback kappa
 
   assert_failure
-  assert_line --partial "rollback should be executed on a git repository"
+  assert_line --partial "auto-rollback should be executed on a git repository"
 }
 
-@test 'rollback enable backup existing post-checkout hook' {
+@test 'auto-rollback enable backup existing post-checkout hook' {
   initialize_git
   dummy_rails_app
   echo dummy > $AWESOME_REPO/.git/hooks/post-checkout
 
-  run $BASE_DIR/bin/rollback enable
+  run $BASE_DIR/bin/auto-rollback enable
 
   assert_success
   assert [ -e $AWESOME_REPO/.git/hooks/post-checkout ]
   assert [ -e $AWESOME_REPO/.git/hooks/post-checkout.old ]
 }
 
-@test 'rollback status on rollback enabled app' {
+@test 'auto-rollback status on auto-rollback enabled app' {
   initialize_git
   dummy_rails_app
 
-  $BASE_DIR/bin/rollback enable
-  run $BASE_DIR/bin/rollback status
+  $BASE_DIR/bin/auto-rollback enable
+  run $BASE_DIR/bin/auto-rollback status
 
   assert_success
   assert_line --partial "enabled"
 }
 
 
-@test 'rollback status on clean app' {
+@test 'auto-rollback status on clean app' {
   initialize_git
   dummy_rails_app
 
-  run $BASE_DIR/bin/rollback status
+  run $BASE_DIR/bin/auto-rollback status
 
   assert_success
   assert_line --partial "disabled"

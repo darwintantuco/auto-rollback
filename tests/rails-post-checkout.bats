@@ -17,7 +17,7 @@ setup() {
   git add .
   git commit -m "Initial commit"
 
-  run $BASE_DIR/bin/rollback enable
+  run $BASE_DIR/bin/auto-rollback enable
   assert_success
 
   assert [ -e $WORKSPACE/appname/.git/hooks/post-checkout ]

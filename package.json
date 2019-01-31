@@ -1,9 +1,9 @@
 {
-  "name": "rollback",
-  "version": "0.0.3",
+  "name": "auto-rollback",
+  "version": "0.0.1",
   "description": "",
   "bin": {
-    "rollback": "./bin/rollback"
+    "auto-rollback": "./bin/auto-rollback"
   },
   "scripts": {
     "test": "bats --tap ./tests/*.bats"

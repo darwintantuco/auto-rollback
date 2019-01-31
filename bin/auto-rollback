@@ -9,7 +9,7 @@ is_git_repo() {
 git_hooks_path=$(git rev-parse --show-toplevel)/.git/hooks
 
 info() {
-  echo "usage: rollback <commands>"
+  echo "usage: auto-rollback <commands>"
   echo ""
   echo "commands:"
   echo "  status      show current rollback status"
@@ -101,7 +101,7 @@ check_args() {
     add_post_checkout
     exit 0
   else
-    echo rollback ${ARGS[*]} is invalid
+    echo auto-rollback ${ARGS[*]} is invalid
     echo ""
     info
     exit 1
@@ -111,7 +111,7 @@ check_args() {
 if is_git_repo; then
   check_args
 else
-  echo "rollback should be executed on a git repository"
+  echo "auto-rollback should be executed on a git repository"
   echo ""
   info
   exit 1
