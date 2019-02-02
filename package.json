@@ -1,6 +1,6 @@
 {
   "name": "auto-rollback",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "",
   "bin": {
     "auto-rollback": "./bin/auto-rollback"

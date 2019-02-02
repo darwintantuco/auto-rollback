@@ -9,15 +9,12 @@ is_git_repo() {
 git_hooks_path=$(git rev-parse --show-toplevel)/.git/hooks
 
 info() {
-  echo "usage: auto-rollback <commands>"
+  echo "usage: npx auto-rollback <commands>"
   echo ""
   echo "commands:"
-  echo "  status      show current rollback status"
   echo "  enable      enable auto migrate"
   echo "  disable     disable auto migrate"
-  echo ""
-  echo "supported apps:"
-  echo "  rails"
+  echo "  status      show rollback status"
 }
 
 generate_post_checkout() {
@@ -112,7 +109,7 @@ check_args() {
     add_post_checkout
     exit 0
   else
-    echo auto-rollback ${ARGS[*]} is invalid
+    echo npx auto-rollback ${ARGS[*]} is invalid
     echo ""
     info
     exit 1
@@ -122,8 +119,6 @@ check_args() {
 if is_git_repo; then
   check_args
 else
-  echo "auto-rollback should be executed on a git repository"
-  echo ""
-  info
+  echo "npx auto-rollback should be executed on a git repository"
   exit 1
 fi
