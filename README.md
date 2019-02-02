@@ -22,21 +22,19 @@ npm >= 5.2.0
 
 ## Usage
 
-Execute `npx auto-rollback` on a git repository
-
-### Enable auto migrate on git checkout
+#### Enable auto migrate on git checkout
 
 ```
 npx auto-rollback enable
 ```
 
-### Disable auto migrate on git checkout
+#### Disable auto migrate on git checkout
 
 ```
 npx auto-rollback disable
 ```
 
-### Show rollback status
+#### Show rollback status
 
 ```
 npx auto-rollback status
