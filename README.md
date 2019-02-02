@@ -10,38 +10,34 @@ Backup existing `post-checkout` hook
 
 ![sample](demo.gif)
 
-## Installation
+## Supported Apps
 
-### npm
+rails
 
-```
-npm install -g auto-rollback
-```
+## Getting Started
+
+### Requirements
+
+npm >= 5.2.0
 
 ## Usage
 
-Execute `auto-rollback` on a git repository
-
-Supported apps:
-
-- rails
-
-### Show current rollback status
+#### Enable auto migrate on git checkout
 
 ```
-auto-rollback status
+npx auto-rollback enable
 ```
 
-### Enable auto migrate on git checkout
+#### Disable auto migrate on git checkout
 
 ```
-auto-rollback enable
+npx auto-rollback disable
 ```
 
-### Disable auto migrate on git checkout
+#### Show rollback status
 
 ```
-auto-rollback disable
+npx auto-rollback status
 ```
 
 ## How auto rollback on rails work?
