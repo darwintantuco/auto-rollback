@@ -9,7 +9,8 @@ is_git_repo() {
 git_hooks_path=$(git rev-parse --show-toplevel)/.git/hooks
 
 info() {
-  echo "usage: npx auto-rollback <commands>"
+  echo "usage:"
+  echo "  npx auto-rollback <commands>"
   echo ""
   echo "commands:"
   echo "  enable      enable auto migrate"
@@ -22,7 +23,8 @@ generate_post_checkout() {
 #!/usr/bin/env bash
 
 ROLLBACK=\$(git config --get rollback.status)
-if [ \$ROLLBACK != "enabled" ]; then exit 0; fi
+if [ -z "\$ROLLBACK" ]; then exit 0; fi
+if [ \$ROLLBACK != "disabled" ]; then exit 0; fi
 if [ \$3 == 0 ]; then exit 0; fi
 
 # Checkout previous branch
@@ -44,7 +46,7 @@ done
 # Undo all changes
 git reset db/migrate -q
 git clean -f db/migrate -q
-git checkout db/schema.rb -q
+git clean -f db/schema.rb -q
 EOT
   chmod +x $git_hooks_path/post-checkout
 }
