@@ -24,7 +24,7 @@ generate_post_checkout() {
 
 ROLLBACK=\$(git config --get rollback.status)
 if [ -z "\$ROLLBACK" ]; then exit 0; fi
-if [ \$ROLLBACK != "disabled" ]; then exit 0; fi
+if [ \$ROLLBACK == "disabled" ]; then exit 0; fi
 if [ \$3 == 0 ]; then exit 0; fi
 
 # Checkout previous branch
