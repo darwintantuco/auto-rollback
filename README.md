@@ -46,7 +46,7 @@ $ npx auto-rollback status
 
 After `git checkout`:
 
-1. It checkout `db/migrate/` from previous branch
+1. Execute `git checkout <previous-branch> db/migrate`
 1. Get migration versions
 1. Execute `bundle exec rake db:migrate:down VERSION=<version>` for each version
 1. Undo all changes in `db/migrate/` and `db/schema.rb`
