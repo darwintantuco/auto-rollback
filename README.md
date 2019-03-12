@@ -20,31 +20,33 @@ rails
 
 npm >= 5.2.0
 
+bash
+
 ## Usage
 
 #### Enable auto migrate on git checkout
 
-```
-npx auto-rollback enable
+```bash
+$ npx auto-rollback enable
 ```
 
 #### Disable auto migrate on git checkout
 
-```
-npx auto-rollback disable
+```bash
+$ npx auto-rollback disable
 ```
 
 #### Show rollback status
 
-```
-npx auto-rollback status
+```bash
+$ npx auto-rollback status
 ```
 
 ## How auto rollback on rails work?
 
 After `git checkout`:
 
-1. Checkout `db/migrate/` from previous branch
+1. Execute `git checkout <previous-branch> db/migrate`
 1. Get migration versions
 1. Execute `bundle exec rake db:migrate:down VERSION=<version>` for each version
 1. Undo all changes in `db/migrate/` and `db/schema.rb`
