@@ -8,7 +8,7 @@ BASE_DIR=$(dirname $BATS_TEST_DIRNAME)
 
 setup() {
   cd $WORKSPACE
-  rails new appname
+  rails new appname --database=postgresql
   cd appname
   rm .ruby-version
   bin/rails db:create
