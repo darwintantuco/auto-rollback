@@ -1,4 +1,6 @@
 language: ruby
+services:
+  - postgresql
 rvm:
   - ruby 2.6.0
 install: gem install rails
