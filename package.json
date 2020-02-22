@@ -1,6 +1,6 @@
 {
   "name": "auto-rollback",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "bin": {
     "auto-rollback": "./bin/auto-rollback"
@@ -13,9 +13,9 @@
     "bats-assert": "https://github.com/ztombol/bats-assert",
     "bats-support": "https://github.com/ztombol/bats-support"
   },
-  "author": "darwin christopher tantuco <darwinxciii@yahoo.com>",
+  "author": "Darwin Christopher Tantuco <dcrtantuco@gmail.com>",
   "bugs": {
-    "url": "https://github.com/dcrtantuco/rollback/issues"
+    "url": "https://github.com/darwintantuco/auto-rollback/issues"
   },
   "license": "MIT",
   "dependencies": {}
