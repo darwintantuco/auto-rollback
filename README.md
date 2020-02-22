@@ -1,6 +1,6 @@
 # auto-rollback
 
-[![Build Status](https://travis-ci.org/dcrtantuco/auto-rollback.svg?branch=master)](https://travis-ci.org/dcrtantuco/auto-rollback)
+[![Build Status](https://travis-ci.org/darwintantuco/auto-rollback.svg?branch=master)](https://travis-ci.org/darwintantuco/auto-rollback)
 
 Custom `post-checkout` git hook to auto rollback new migrations on git checkout
 
